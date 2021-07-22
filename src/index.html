@@ -1,0 +1,130 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self';">
+    <!-- Bootstrap CSS -->
+    <link type="text/css" rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link type="text/css" href="./index.css" rel="stylesheet">
+
+    <title>Data Source Selection</title>
+  </head>
+  <body>
+    <h1>Data Sources</h1>
+
+    <div id="columns" class="container">
+    <div id="data-cards" class="row"></div>
+    </div>
+
+    <div class="container sticky-bottom" style='padding-bottom: 100px; padding-top: 100px;'>
+      <div class="row">
+        <div class="col-sm-3"><button type="button" class="btn btn-success justify-content-center" id="addSourceButton">Add Data Source</button></div>
+        <div class="col-sm-3"><button id="dataRules" type="button" class="btn btn-primary" data-toggle="modal" data-target="#sourceLinkModal">
+          Add Data Rules
+        </button>
+        </div>
+        <div class="col-sm-3"><button id="columnEditor" type="button" class="btn btn-primary" data-toggle="modal" data-target="#createColumnModal">
+          Create Columns
+        </button>
+        </div>
+        <div class="col-sm-3"><button id="mismatchViewer" type="button" class="btn btn-warning" data-toggle="modal" data-target="#mismatchModal">
+          See Mismatches
+        </button>
+        </div>
+      </div>
+    </div>
+
+<!-- Linking Modal -->
+<div class="modal fade" id="sourceLinkModal" tabindex="-1" role="dialog" aria-labelledby="sourceLinkModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Data Linking Rules</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style = "font-style: italic">Note: If the "Null Value Check" box is ticked for a given rule, the case sensitive box will be ignored (since it will have no effect).</p>
+        <div id="columnsLink" class="container">
+
+          </div>
+      
+          <div class="container sticky-bottom" style='padding-bottom: 50px; padding-top: 50px;'>
+            <div class="row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-7"><button type="button" class="btn btn-primary justify-content-center" id="add-link-card">Add Link Rule</button></div>
+              <div class="col-sm-2"></div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveLinks" type="button" class="btn btn-success">Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Column Modal -->
+<div class="modal fade" id="createColumnModal" tabindex="-1" role="dialog" aria-labelledby="createColumnModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create a Custom Column</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"  id='createColumnBody'>
+        <div id="columnsCol" class="container">
+          <div id="col-modal-priors"></div>
+
+          <div id="col-modal-main"></div>
+          </div>
+      
+          <div class="container sticky-bottom" style='padding-bottom: 50px; padding-top: 50px;'>
+            <div class="row">
+              <div class="col-sm-2"></div>
+              <div class="col-sm-4"><button type="button" class="btn btn-primary justify-content-center" id="add-custom-column">Add Custom Column</button></div>
+              <div class="col-sm-2"></div>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button id="saveColumns" type="button" class="btn btn-success" disabled='disabled'>Save</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mismatch Modal -->
+<div class="modal fade" id="mismatchModal" tabindex="-1" role="dialog" aria-labelledby="mismatchModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">View Rule Mismatches</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id='mismatchBody'>
+        <div id="columnsMismatch" class="container"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <script type="text/javascript" src="./js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="./js/popper.min.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./render.js" ></script>
+    <script type="text/javascript" src="./pageActions.js"></script>
+  </body>
+</html>
