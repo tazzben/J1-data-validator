@@ -230,11 +230,25 @@ function add_custom_column() {
   card.className = `card`;
   card.setAttribute("style","width: 18*3rem;");
   card.setAttribute("id",`column-${col_name}-card`);
+  card.onfocus = function () {create_preview(col_name)};
   let card_b = document.createElement('div');
   card_b.className = "card-body";
   let card_title = document.createElement('h5');
   card_title.className = "card-title";
   card_title.innerText = `Custom Column ${col_name}`;
+  card_title.setAttribute("contenteditable", "true");
+  card_title.onkeypress = function () {
+    if( JSON.stringify(testJSON).indexOf(card_title.innerText) > -1 ) {
+      document.getElementById('saveColumns').setAttribute('disabled', 'true');
+    }
+  };
+  // let glyph = document.createElement('img');
+  // glyph.setAttribute('src', 'icons/pencil.svg');
+  // glyph.setAttribute('width','16');
+  // glyph.onclick = function() {
+  //   card_title.setAttribute("contenteditable", "true");
+  //   // card_title.
+  // };
   let row = document.createElement('div');
   row.className = "row";
   //Left Column
@@ -253,9 +267,9 @@ function add_custom_column() {
   button1.setAttribute('aria-expanded', 'false');
   button1.setAttribute('style', 'margin-top:7px');
   button1.onclick = function(){
-    fetch_preview(col_name); 
+    fetch_preview(col_name);
     try {
-    create_preview(col_name)
+    create_preview(col_name);
   } catch {
     preview_error(col_name);
   }};
@@ -274,7 +288,7 @@ function add_custom_column() {
   text_in.setAttribute('placeholder', 'Enter regex rule for new column');
   text_in.onkeyup = function(){
     try {
-      create_preview(col_name)
+      create_preview(col_name);
     } catch {
       preview_error(col_name);
     }
@@ -304,7 +318,9 @@ function add_custom_column() {
   btn_p.setAttribute('aria-controls',`sample${col_name}`);
   btn_p.className = "btn btn-info";
   // btn_p.onclick = function() {preview_column(`column-${col_name}-card`)};
-  btn_p.onclick = function () {fetch_preview(col_name)};
+  btn_p.onclick = function () {
+    fetch_preview(col_name);
+  }
   btn_p.innerText = "Preview Custom Column";
 
   let row3 = document.createElement('div');
@@ -324,6 +340,7 @@ function add_custom_column() {
   col2.appendChild(text_in);
   row.appendChild(col1);
   row.appendChild(col2);
+  // card_b.appendChild(glyph);
   card_b.appendChild(card_title);
   card_b.appendChild(row);
   col12.appendChild(btn_r);
@@ -340,25 +357,39 @@ function add_custom_column() {
 // Function to retrieve data from original column in order to generate the preview
 //   based on the regex that the user provides
 function fetch_preview(column) {
-  let data = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.source);
+  // let data = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.source);
   let columnN = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.column);
-  if (testJSON.find(element => element.ID == data)) {
-    let colID = testJSON.find(element => element.ID == data)['columns'].find(element => element.name==columnN)['ID'];
+  // if (testJSON.find(element => element.ID == data)) {
+  //   let colID = testJSON.find(element => element.ID == data)['columns'].find(element => element.name==columnN)['ID'];
 
-    window.api.send("toMain", {action: "getDataFromColumn", payload:{column_id:colID,limit:5}, column:column});
-  }
+  window.api.send("toMain", {action: "getDataFromColumn", payload:{column_id:columnN,limit:5}, column:column});
+  // }
   
 }
 
 // Function to render a preview of the custom column based on the data fetched in fetch_preview,
 //   will notify user when regex is not valid
 function create_preview(column) {
-  document.getElementById('saveColumns').removeAttribute('disabled');
-  let data = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.source);
-  let columnN = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.column);
-  let colID = testJSON.find(element => element.ID == data)['columns'].find(element => element.name==columnN)['ID'];
 
-  let this_card = previews.find(element => element.column_id == colID)['rows'];
+  if( JSON.stringify(testJSON).indexOf(document.getElementById(`column-${column}-card`).querySelector(`h5`).innerText) == -1 ) {
+    document.getElementById('saveColumns').removeAttribute('disabled');
+    if (document.getElementById('alert')) {
+      document.getElementById('alert').remove();
+    }
+  } else {
+    if (!document.getElementById('alert')) {
+      let alert = document.createElement('h6');
+      alert.setAttribute('id', 'alert');
+      alert.innerText = "Column name already taken. Please update and try again.";
+      document.getElementById(`column-${column}-card`).appendChild(alert);
+      document.getElementById(`column-${column}-card`).querySelector(`h5`).focus();
+      document.getElementById('saveColumns').setAttribute('disabled', 'true');
+    }
+}
+
+  let columnN = parseInt(document.getElementById(`column-${column}-card`).querySelector(`#column-${column}`).dataset.column);
+
+  let this_card = previews.find(element => element.column_id == columnN)['rows'];
   let current = [];
   for (let i=0; i < this_card.length; i++) {
     current.push(this_card[i]['data_string']);
@@ -389,7 +420,6 @@ function create_preview(column) {
   table_h.appendChild(th2);
   table_b.appendChild(table_h);
   
-
   for (let i=0; i < preview.length; i++) {
     let cell1_text = preview[i][0];
     let cell2_text = preview[i][1];
@@ -1258,13 +1288,14 @@ $( "#add-custom-column" ).click(function() {
 $("#saveColumns").click(function() {
 
   for (let i=0; i<document.getElementById('col-modal-main').children.length; i++) {
-    let data = parseInt(document.getElementById('col-modal-main').children[i].dataset.source);
-    let columnN = parseInt(document.getElementById('col-modal-main').children[i].dataset.column);
-    let colID = testJSON.find(element => element.ID == data)['columns'].find(element => element.name==columnN)['ID'];
+    let data = parseInt(document.getElementById('col-modal-main').children[i].querySelector('button').dataset.source);
+    let columnN = parseInt(document.getElementById('col-modal-main').children[i].querySelector('button').dataset.column);
+    let columnTitle = document.getElementById('col-modal-main').children[i].querySelector('h5').innerText;
+
     let rule = document.getElementById('col-modal-main').children[i].querySelector('input').value
 
     // Insert Transform:
-    window.api.send("toMain", {action: "insertTransform", payload: {dataSource_id: parseInt(data), column_id: parseInt(colID), regular_rule: rule, name:columnN + " EDITED" }});
+    window.api.send("toMain", {action: "insertTransform", payload: {dataSource_id: parseInt(data), column_id: parseInt(columnN), regular_rule: rule, name:columnTitle}});
   }
 
 });

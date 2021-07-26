@@ -627,7 +627,7 @@ const createMenu = () => {
         {
           label: 'Online Docs',
           click: async () => {
-            await shell.openExternal('https://tazzben.github.io/data-validator-docs/');
+            await shell.openExternal('https://j1-data-validator.gitbook.io/');
           }
         },
       ]
