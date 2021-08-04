@@ -342,12 +342,29 @@ const importFromFile = async (db, filepath, splash = false) => {
 
 const exportToFile = async (filepath) => {
     let obj = {};
-    obj['datasets'] = await settings.get('datasets');
+    let uncleandatasets = await settings.get('datasets');
+    obj['datasets'] = cleanDataSets(uncleandatasets);
     obj['transforms'] = await settings.get('transforms');
     obj['rules'] = await settings.get('rules');
     let jsonString = JSON.stringify(obj, null, 2);
     return writeFileSafe(filepath, jsonString);
 };
+
+/**
+ * Cleans the dataset object of full file paths
+ * @param {array} ds 
+ */
+
+const cleanDataSets = (ds) => {
+    let c = [];
+    for (let row of ds){
+        if(row.filepath){
+            row.filepath = path.basename(row.filepath); 
+        }
+        c.push(row);
+    }
+    return c;
+}; 
 
 module.exports = {
     addIgnore: addIgnore,

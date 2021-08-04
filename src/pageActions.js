@@ -237,8 +237,11 @@ function add_custom_column() {
   card_title.className = "card-title";
   card_title.innerText = `Custom Column ${col_name}`;
   card_title.setAttribute("contenteditable", "true");
-  card_title.onkeypress = function () {
-    if( JSON.stringify(testJSON).indexOf(card_title.innerText) > -1 ) {
+  card_title.onkeyup = function () {
+    let columnFilter = testJSON.filter(ds => ds.columns?.filter(col => col?.name == card_title.innerText).length > 0);
+    if( !(columnFilter?.length > 0) ) {
+      document.getElementById('saveColumns').removeAttribute('disabled');
+    } else {
       document.getElementById('saveColumns').setAttribute('disabled', 'true');
     }
   };
@@ -307,7 +310,10 @@ function add_custom_column() {
   let btn_r = document.createElement('a');
   btn_r.setAttribute('href','#');
   btn_r.className = "btn btn-danger";
-  btn_r.onclick = function() {remove_column(`column-${col_name}-card`)};
+  btn_r.onclick = function() {
+    remove_column(`column-${col_name}-card`);
+    document.getElementById('saveColumns').setAttribute('disabled','true');
+    document.getElementById('add-custom-column').removeAttribute("disabled");}
   btn_r.innerText = "Remove Column";
 
   let btn_p = document.createElement('a');
@@ -370,20 +376,21 @@ function fetch_preview(column) {
 // Function to render a preview of the custom column based on the data fetched in fetch_preview,
 //   will notify user when regex is not valid
 function create_preview(column) {
-
-  if( JSON.stringify(testJSON).indexOf(document.getElementById(`column-${column}-card`).querySelector(`h5`).innerText) == -1 ) {
+  let columnName = document.getElementById(`column-${column}-card`).querySelector(`h5`).innerText;
+  let columnFilter = testJSON.filter(ds => ds.columns?.filter(col => col?.name == columnName).length > 0);
+  if( !(columnFilter?.length > 0) ) {
     document.getElementById('saveColumns').removeAttribute('disabled');
     if (document.getElementById('alert')) {
       document.getElementById('alert').remove();
     }
   } else {
+    document.getElementById('saveColumns').setAttribute('disabled', 'true');
     if (!document.getElementById('alert')) {
       let alert = document.createElement('h6');
       alert.setAttribute('id', 'alert');
       alert.innerText = "Column name already taken. Please update and try again.";
       document.getElementById(`column-${column}-card`).appendChild(alert);
-      document.getElementById(`column-${column}-card`).querySelector(`h5`).focus();
-      document.getElementById('saveColumns').setAttribute('disabled', 'true');
+      document.getElementById(`column-${column}-card`).querySelector(`h5`).focus();      
     }
 }
 
@@ -419,7 +426,6 @@ function create_preview(column) {
   table_h.appendChild(th1);
   table_h.appendChild(th2);
   table_b.appendChild(table_h);
-  
   for (let i=0; i < preview.length; i++) {
     let cell1_text = preview[i][0];
     let cell2_text = preview[i][1];
@@ -432,14 +438,21 @@ function create_preview(column) {
 
     row.appendChild(cell1);
     row.appendChild(cell2);
-
+  
     table_b.appendChild(row);
   }
 
+  removeAllChildNodes(preview_table);
   preview_table.appendChild(table_b);
 
-  document.getElementById(`sample${column}`).innerHTML = "<br><br>";
-  document.getElementById(`sample${column}`).append(preview_table);
+  document.getElementById(`sample${column}`).querySelector('table').remove();
+  document.getElementById(`sample${column}`).appendChild(preview_table);
+
+  if (document.getElementById('sample2')) {
+    if (document.getElementById('sample2').querySelector('td').innerText=='undefined') {
+      if (document.getElementById('saveColumns')) {
+        document.getElementById('saveColumns').setAttribute("disabled", "true");
+  }}}
 }
 
 // Function to notify the user that regex provided is invalid, and therefore cannot
@@ -605,7 +618,6 @@ function list_columns(id) {
 //   selected from a dropdown, indicating that the change has been registered
 //   This version is for two-column contexts
 function button_update_column(data_id, column_id, link) {
-    console.log(data_id, column_id, link)
     document.getElementById(`column-${link}`).innerText = testJSON[data_id]['ID'] + " - " + testJSON[data_id]['columns'][column_id]['name'];
     document.getElementById(`column-${link}`).setAttribute('data-source', testJSON[data_id]['ID']);
     document.getElementById(`column-${link}`).setAttribute('data-column', testJSON[data_id]['columns'][column_id]['ID']);
@@ -1217,6 +1229,13 @@ function previous_mismatch() {
   last_mismatch();
 }
 
+
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
+
 // Declare global variables
 var link_count = 0;
 var cols_count = 0;
@@ -1281,6 +1300,8 @@ $("#saveLinks").click(function() {
 // On-click functionality for the add-custom-column button
 $( "#add-custom-column" ).click(function() {
   add_column_card();
+  document.getElementById('add-custom-column').setAttribute('disabled', 'true');
+  document.getElementById('saveColumns').setAttribute('disabled', 'true');
 });
 
 // On-click functionality for the saveColumns button
@@ -1296,6 +1317,7 @@ $("#saveColumns").click(function() {
 
     // Insert Transform:
     window.api.send("toMain", {action: "insertTransform", payload: {dataSource_id: parseInt(data), column_id: parseInt(columnN), regular_rule: rule, name:columnTitle}});
+    document.getElementById('add-custom-column').removeAttribute('disabled');
   }
 
 });
