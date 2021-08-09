@@ -1,5 +1,6 @@
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const settings = require('./settings.js')
+const settings = require('./settings.js');
+const path = require('path');
 
 /**
  * Writes all exceptions to a CSV file 
@@ -22,8 +23,8 @@ const writeExceptions = async (db, filename) => {
                 two_string: row.two_string,
                 columnOneName: row.columnOneName,
                 columnTwoName: row.columnTwoName,
-                filepathOne: row.filepathOne,
-                filepathTwo: row.filepathTwo,
+                filepathOne: path.basename(row.filepathOne),
+                filepathTwo: path.basename(row.filepathTwo),
                 sqlrule: row.sqlrule,
                 otherrule: row.otherrule,
                 ignored: ignore

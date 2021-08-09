@@ -6,7 +6,7 @@ const {
   dialog,
   shell
 } = require('electron');
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
 const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
