@@ -631,6 +631,15 @@ const createMenu = () => {
             await shell.openExternal('https://j1-data-validator.gitbook.io/');
           }
         },
+        {
+          label: 'Version',
+          click: async () => {
+            await dialog.showMessageBox(null, {
+              message: 'Version Number',
+              detail: 'Version: ' + app.getVersion()
+            });
+          }
+        }
       ]
     }
   ];
