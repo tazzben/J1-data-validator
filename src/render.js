@@ -14,6 +14,10 @@ window.api.receive("fromMain", (data) => {
                 testJSON[i]['name'] = testJSON[i]['filepath'].split("/").pop().split("\\").pop().split(".")[0];
                 $("#data-cards").append(createCard(testJSON[i]['ID']));
             }
+            if (document.getElementById('col-modal-main').children.length>0) {
+                document.getElementById('col-modal-main').children[0].remove();
+            }
+            document.getElementById('add-custom-column').removeAttribute('disabled');
 //            window.api.send("toMain", {action: "getTransforms"});
             break;
         
@@ -73,7 +77,10 @@ window.api.receive("fromMain", (data) => {
         case 'getTransforms':
             cols_count = 0;
             document.getElementById('col-modal-priors').innerHTML = "";
-            document.getElementById('col-modal-main').innerHTML = "";   
+            if (document.getElementById('col-modal-main').children.length>0) {
+                document.getElementById('col-modal-main').children[0].remove();
+            }
+            document.getElementById('add-custom-column').removeAttribute('disabled');
 
             for (let i=0; i<data.payload.length; i++) {
                 add_existing_transform(data.payload[i]);

@@ -691,6 +691,7 @@ function send_links(all_rules) {
       } else {
         console.log(`window.api.send("toMain", {action: "insertRule", payload:{dataSource_id_one: ${data1}, dataSource_id_two: ${data2}, columns_id_one: ${colID1}, columns_id_two: ${colID2}, sqlrule: "=", otherrule:""}});`);
         window.api.send("toMain", {action: "insertRule", payload:{dataSource_id_one: data1, dataSource_id_two: data2, columns_id_one: colID1, columns_id_two: colID2, sqlrule: "=", otherrule:""}});
+        
       }
   
       
@@ -1267,8 +1268,10 @@ $("#saveLinks").click(function() {
     let col2 = document.getElementById('columnsLink').children[i].querySelector('[id=column2]');
     if (col1.innerText.split(" ")[0]=="Select") {
       alert(`Rule ${ruleNo} not saved because the first variable was not selected.`);
+      return;
     } else if (col2.innerText.split(" ")[0]=="Select") {
       alert(`Rule ${ruleNo} not saved because the second variable was not selected.`);
+      return;
     } else {
       // SEND MESSAGE TO MAIN HERE
 
