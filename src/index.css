@@ -18,3 +18,7 @@ h1 {
 .dropdown {
   margin: 1rem;
 }
+
+img {
+  -webkit-user-drag: none;
+}
