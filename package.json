@@ -1,7 +1,7 @@
 {
   "name": "data-validator",
   "productName": "Data Validator",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Data Validator for J1",
   "main": "src/main.js",
   "scripts": {
