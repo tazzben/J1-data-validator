@@ -22,3 +22,9 @@ h1 {
 img {
   -webkit-user-drag: none;
 }
+
+.btn-secondary {
+  overflow: hidden;
+  min-width: 5em;
+  max-width: 10em;
+}
