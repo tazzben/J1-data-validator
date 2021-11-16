@@ -491,10 +491,10 @@ ipcMain.on("toMain", (event, args) => {
   if (args.action == 'insertTransform') {
     let pl = args.payload;
     pl.name = pl.name.trim();
-    pl.name = (pl.name.length > 0) ? pl.name : 'Untitled Column';
+    pl.name = (pl.name.length > 0) ? pl.name : 'Untitled Column';    
     sendMessage({
       action: 'insertTransform',
-      payload: data.insertTransform(pl.dataSource_id, pl.column_id, pl.regular_rule, pl.name),
+      payload: data.insertTransform(pl.dataSource_id, pl.column_id, pl.regular_rule, pl.name, pl.truefalse),
       args: args
     });
     transformHelper(data, args);

@@ -8,7 +8,7 @@ let dS = class dataStorage {
       'create table if not exists row (ID INTEGER PRIMARY KEY AUTOINCREMENT, dataSource_id int);',
       'create table if not exists data (ID INTEGER PRIMARY KEY AUTOINCREMENT, dataSource_id int, columns_id int, row_id int, data_num real, data_string text);',
       'create table if not exists rule (ID INTEGER PRIMARY KEY AUTOINCREMENT, dataSource_id_one int, columns_id_one int, dataSource_id_two int, columns_id_two int, sqlrule text, otherrule text);',
-      'create table if not exists transforms (ID INTEGER PRIMARY KEY AUTOINCREMENT, dataSource_id int, columns_id int, regular_rule text, target_columns_id int);'
+      'create table if not exists transforms (ID INTEGER PRIMARY KEY AUTOINCREMENT, dataSource_id int, columns_id int, regular_rule text, target_columns_id int, truefalse int);'
     ];
     for (let value of creationList) {
       db.prepare(value).run();
@@ -129,8 +129,8 @@ let dS = class dataStorage {
    * @returns result of insert
    */
   
-  insertTransformRecord(dataSource_id, column_id, regular_rule, target_columns_id) {
-    return this.db.prepare('INSERT INTO transforms (dataSource_id, columns_id, regular_rule, target_columns_id) VALUES(?,?,?,?)').run([dataSource_id, column_id, regular_rule, target_columns_id]);
+  insertTransformRecord(dataSource_id, column_id, regular_rule, target_columns_id, truefalse = 0) {
+    return this.db.prepare('INSERT INTO transforms (dataSource_id, columns_id, regular_rule, target_columns_id, truefalse) VALUES(?,?,?,?,?)').run([dataSource_id, column_id, regular_rule, target_columns_id, truefalse]);
   }
   
   /**
@@ -142,7 +142,7 @@ let dS = class dataStorage {
    * @returns true or false
    */
   
-  insertTransform(dataSource_id, column_id, regular_rule, name) {
+  insertTransform(dataSource_id, column_id, regular_rule, name, truefalse = 0) {
     let isValid = true;
     try {
       new RegExp(regular_rule, 'ig');
@@ -151,7 +151,7 @@ let dS = class dataStorage {
     }
     if (isValid) {
       let target_columns_id = this.insertColumn(dataSource_id, name, 0);
-      this.insertTransformRecord(dataSource_id, column_id, regular_rule, target_columns_id);
+      this.insertTransformRecord(dataSource_id, column_id, regular_rule, target_columns_id, ((truefalse) ? 1 : 0));
       let rows = this.selectDataFromColumn(column_id);
       for (let row of rows) {
         let regularExpressionSearch = new RegExp(regular_rule, 'ig');
@@ -159,6 +159,9 @@ let dS = class dataStorage {
         let dataString = "";
         if (matches && typeof matches[1] === 'string') {
           dataString = matches[1].trim();
+        }
+        if (truefalse) {
+          dataString = (dataString.length > 0) ? "TRUE" : "FALSE";
         }
         let row_id = row.row_id;
         this.insertData(dataSource_id, target_columns_id, row_id, dataString);
@@ -274,7 +277,7 @@ let dS = class dataStorage {
    */
   
   exportTransforms() {
-    return this.db.prepare('SELECT dataSource_id, columns_id, regular_rule, target_columns_id FROM transforms ORDER BY ID ASC').all();
+    return this.db.prepare('SELECT dataSource_id, columns_id, regular_rule, target_columns_id, truefalse FROM transforms ORDER BY ID ASC').all();
   }
   
   /**

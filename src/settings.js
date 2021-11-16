@@ -141,7 +141,8 @@ const updateTransformsSettings = async (db) => {
     for (let row of transforms) {
         let obj = {
             dataSource_id: row.dataSource_id,
-            regular_rule: row.regular_rule
+            regular_rule: row.regular_rule, 
+            truefalse: row.truefalse
         };
         let cols = db.selectColumns(row.dataSource_id);
         let cName = cols.find(item => item.ID === row.columns_id);
@@ -246,7 +247,8 @@ const readTransformSettings = async (db, transforms) => {
         let cols = db.selectColumns(row.dataSource_id);
         let colID = cols.find(item => item.name === row.column);
         if (colID) {
-            const r = db.insertTransform(row.dataSource_id, colID.ID, row.regular_rule, row.target_column);
+            const truefalse = (row.truefalse) ? 1 : 0;
+            const r = db.insertTransform(row.dataSource_id, colID.ID, row.regular_rule, row.target_column, truefalse);
             if (r) {
                 cleanTransforms.push(row);
             }

@@ -296,6 +296,15 @@ function add_custom_column() {
       preview_error(col_name);
     }
     };
+  let checktruefalse = document.createElement('input');
+  checktruefalse.className = "form-check-input";
+  checktruefalse.setAttribute('id', 'truefalseCheckbox');
+  checktruefalse.setAttribute('name', 'truefalseCheckbox');
+  checktruefalse.setAttribute('type', 'checkbox');
+  let checktf_l = document.createElement('label');
+  checktf_l.className = "form-check-label";
+  checktf_l.setAttribute('for', 'truefalseCheckbox');
+  checktf_l.innerText = "Convert to TRUE/FALSE";
 
   //Button row
 
@@ -344,6 +353,8 @@ function add_custom_column() {
   col1.appendChild(center1);
   col2.appendChild(label);
   col2.appendChild(text_in);
+  col2.appendChild(checktruefalse);
+  col2.appendChild(checktf_l);
   row.appendChild(col1);
   row.appendChild(col2);
   // card_b.appendChild(glyph);
@@ -723,7 +734,13 @@ function add_existing_transform(rule) {
   //Left Column
   let col1 = document.createElement('div');
   col1.className = "col-md-6";
-  col1.innerText = `Regex: ${rule.regular_rule}`
+  const truefalse = (rule.truefalse) ? "TRUE" : "FALSE";
+  let regtext = document.createElement('div');
+  regtext.innerText = `Regex: ${rule.regular_rule}`;
+  let truefalsetext = document.createElement('div');
+  truefalsetext.innerText = `Convert to TRUE/FALSE: ${truefalse}`;
+  col1.appendChild(regtext);
+  col1.appendChild(truefalsetext);
   //Empy Middle Column
   let col2 = document.createElement('div');
   col2.className = "col-md-3";
@@ -1315,11 +1332,11 @@ $("#saveColumns").click(function() {
     let data = parseInt(document.getElementById('col-modal-main').children[i].querySelector('button').dataset.source);
     let columnN = parseInt(document.getElementById('col-modal-main').children[i].querySelector('button').dataset.column);
     let columnTitle = document.getElementById('col-modal-main').children[i].querySelector('h5').innerText;
-
+    const truefalse = ($('#truefalseCheckbox')[0].checked) ? 1 : 0;
     let rule = document.getElementById('col-modal-main').children[i].querySelector('input').value
 
     // Insert Transform:
-    window.api.send("toMain", {action: "insertTransform", payload: {dataSource_id: parseInt(data), column_id: parseInt(columnN), regular_rule: rule, name:columnTitle}});
+    window.api.send("toMain", {action: "insertTransform", payload: {dataSource_id: parseInt(data), column_id: parseInt(columnN), regular_rule: rule, name:columnTitle, truefalse: truefalse}});
     document.getElementById('add-custom-column').removeAttribute('disabled');
   }
 
