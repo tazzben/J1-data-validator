@@ -1,7 +1,7 @@
 {
   "name": "data-validator",
   "productName": "Data Validator",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Data Validator for J1",
   "main": "src/main.js",
   "scripts": {
@@ -33,24 +33,24 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "better-sqlite3": "^7.5.3",
+    "better-sqlite3": "^8.0.0",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.2",
     "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.63",
-    "@electron-forge/maker-deb": "^6.0.0-beta.63",
-    "@electron-forge/maker-dmg": "^6.0.0-beta.63",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.63",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.63",
-    "@electron-forge/maker-zip": "^6.0.0-beta.63",
-    "@electron-forge/publisher-github": "^6.0.0-beta.63",
-    "electron": "^19.0.0",
-    "electron-rebuild": "^3.2.7",
-    "eslint": "^8.16.0"
+    "@electron-forge/cli": "^6.0.0",
+    "@electron-forge/maker-deb": "^6.0.0",
+    "@electron-forge/maker-dmg": "^6.0.0",
+    "@electron-forge/maker-rpm": "^6.0.0",
+    "@electron-forge/maker-squirrel": "^6.0.0",
+    "@electron-forge/maker-zip": "^6.0.0",
+    "@electron-forge/publisher-github": "^6.0.0",
+    "@electron/rebuild": "^3.2.10",
+    "electron": "^21.3.1",
+    "eslint": "^8.23.0"
   }
 }
