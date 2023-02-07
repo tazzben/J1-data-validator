@@ -33,24 +33,25 @@
     "forge": "./forge.config.js"
   },
   "dependencies": {
-    "better-sqlite3": "^8.0.0",
+    "better-sqlite3": "^8.1.0",
     "csv-parser": "^3.0.0",
     "csv-writer": "^1.6.0",
     "dotenv": "^16.0.2",
     "electron-settings": "^4.0.2",
     "electron-squirrel-startup": "^1.0.0",
+    "upgrade": "^1.1.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0",
-    "@electron-forge/maker-deb": "^6.0.0",
-    "@electron-forge/maker-dmg": "^6.0.0",
-    "@electron-forge/maker-rpm": "^6.0.0",
-    "@electron-forge/maker-squirrel": "^6.0.0",
-    "@electron-forge/maker-zip": "^6.0.0",
-    "@electron-forge/publisher-github": "^6.0.0",
+    "@electron-forge/cli": "^6.0.5",
+    "@electron-forge/maker-deb": "^6.0.5",
+    "@electron-forge/maker-dmg": "^6.0.5",
+    "@electron-forge/maker-rpm": "^6.0.5",
+    "@electron-forge/maker-squirrel": "^6.0.5",
+    "@electron-forge/maker-zip": "^6.0.5",
+    "@electron-forge/publisher-github": "^6.0.5",
     "@electron/rebuild": "^3.2.10",
-    "electron": "^21.3.1",
-    "eslint": "^8.23.0"
+    "electron": "^23.0.0",
+    "eslint": "^8.33.0"
   }
 }
