@@ -18,7 +18,8 @@ let baseConfig = {
     },
     osxNotarize: {
       appleId: process.env.APPLEID,
-      appleIdPassword: process.env.APPLEID_PASSWORD
+      appleIdPassword: process.env.APPLEID_PASSWORD,
+      teamId: process.env.APPLE_TEAMID
     }
   },
   makers: [{
@@ -33,16 +34,6 @@ let baseConfig = {
     },
     {
       name: "@electron-forge/maker-zip",
-      platforms: [
-        "darwin"
-      ]
-    },
-    {
-      name: "@electron-forge/maker-dmg",
-      config: {
-        name: "Data Validator",
-        icon: "./src/icons/icon.icns"
-      },
       platforms: [
         "darwin"
       ]
